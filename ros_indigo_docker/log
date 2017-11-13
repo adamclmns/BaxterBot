@@ -1,0 +1,21 @@
+Installing and Setting up Docker
+    https://docs.docker.com/engine/installation/linux/docker-ce/ubuntu/
+    NOTE: Didn't do any of that crap. I just ran 
+        $> sudo apt-get install docker docker-compose
+    Using Ubuntu 17.10, due to hardware constraints (cpu support)
+
+    https://docs.docker.com/engine/installation/linux/linux-postinstall/
+    NOTE: I did actually need to run the post-install step to run "docker" as non-root
+        $> sudo useradd -aG docker $USER
+    Log out and Back in required. 
+    NOTE: If you can run 
+        $> docker hello-world
+    and see the "Hello from docker" with a bunch of output about docker versions, then
+    all is well. see screeshot_001.png for example.
+
+    Followed this tutorial as a nice refresher for using docker
+    https://docs.docker.com/get-started/#setup
+
+    Modifying example in docker-tutorial/ to use an ros image with the simulator
+    Experimenting with Docker Images found here - https://hub.docker.com/r/davetcoleman/baxter_simulator/
+
