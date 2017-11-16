@@ -9,11 +9,12 @@ RUN apt-get -y update
 RUN apt-get -y install ros-indigo-desktop-full
 RUN apt-get -y install git-core python-argparse python-wstool python-vcstools python-rosdep ros-indigo-control-msgs ros-indigo-joystick-drivers
 RUN apt-get -y install gazebo2 ros-indigo-qt-build ros-indigo-driver-common ros-indigo-gazebo-ros-control ros-indigo-gazebo-ros-pkgs ros-indigo-ros-control ros-indigo-control-toolbox ros-indigo-realtime-tools ros-indigo-ros-controllers ros-indigo-xacro python-wstool ros-indigo-tf-conversions ros-indigo-kdl-parser
-
+# Packages from http://sdk.rethinkrobotics.com/wiki/Simulator_Installation
 #extra packages for SSSA TAUM
 RUN apt-get -y install ros-indigo-openni2-camera ros-indigo-visp ros-indigo-visp-bridge ros-indigo-moveit-core libzmq-dev libx264-dev ros-indigo-moveit-ros-move-group ros-indigo-ecl-geometry
 #RUN apt-get -y install xfce4
-
+# This is just for hot-editing of the image and config files
+RUN apt-get -y install nano
 # final part
 RUN rosdep init
 RUN rosdep update
@@ -25,13 +26,15 @@ RUN /bin/bash -c "cd ~/ros_ws/src && wstool merge https://raw.githubusercontent.
 RUN /bin/bash -c "cd ~/ros_ws/src && wstool merge https://raw.githubusercontent.com/RethinkRobotics/baxter_simulator/master/baxter_simulator.rosinstall"
 RUN /bin/bash -c "cd ~/ros_ws/src && wstool update"
 RUN /bin/bash -c "cd ~/ros_ws && source /opt/ros/indigo/setup.bash && catkin_make && catkin_make install"
-RUN wget https://github.com/RethinkRobotics/baxter/raw/master/baxter.sh
+RUN /bin/bash -c "cd ~/ros_ws/ && wget https://github.com/RethinkRobotics/baxter/raw/master/baxter.sh && chmod u+x baxter.sh"
 # TODO: Get Baxter Configuration from user during setup.
 # TODO: TEST Gazebo Simulator for Baxter
-RUN chmod u+x baxter.sh
+# TODO: Make sure baxter.sh gets put in the right directory on build
 RUN echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 # TODO: Add an echo here to tell the user what to do ('roscore' or 'rosrun', etc. Maybe even have a tutorial. )
-
+RUN echo "roslaunch baxter_gazebo baxter_world.launch"
+RUN echo "roscore"
+RUN echo "./baxter.sh sim"
 CMD /bin/bash
 #MISSING DOWNLOAD of GAZEBO models inside: user/.gazebo/models
 #https://bitbucket.org/osrf/gazebo_models/downloads

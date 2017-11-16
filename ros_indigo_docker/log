@@ -19,3 +19,46 @@ Installing and Setting up Docker
     Modifying example in docker-tutorial/ to use an ros image with the simulator
     Experimenting with Docker Images found here - https://hub.docker.com/r/davetcoleman/baxter_simulator/
 
+
+Building a docker image for ROS indigo and running baxter simulator
+
+1> Install Docker. 
+    NOTE: I just used "sudo apt-get install docker docker-engine -y"
+    USING: Ubuntu 17.10 x64; docker --version : Docker version 1.13.1, build 092cba3
+        Windows 10 Pro x64; docker --version :
+    
+    run 
+        $> sudo useradd -aG docker $USER
+    
+    log out, log back in, and then run
+        $> docker hello-world
+    output should look like screenshot_001.png
+
+2> Pull Docker ROS Images from public repositories using "docker pull" command.
+
+    $> docker pull ros:indigo-robot
+    
+    each download will take some time. But you won't have to do it again later. Docker images are built by layering on top of one another, so they can remain small. 
+
+3> Use docker build to convert "src/Dockerfile" into a docker image you can run.
+    open a command line at the "src/" directory in this project.
+    run 
+        $> docker build . -t baxter-sim
+    This takes a while. But if you don't modify the docker file, you don't have to rebuild it again.
+
+4> Use docker run to spin up an instance of the Container, and launch ROS
+    In a command line run 
+        $> docker run -it baxter-sim
+    Modify the baxter.sh file "your_ip" value to "127.0.0.1"
+    Run the following to start ROS
+        $> roscore
+
+5> Connect to the docker instance from another terminal. 
+    Run 
+        $> docker exec -it baxter-sim bash
+    to open a new terminal to the Container. 
+    Run
+        $> cd ~/ros_ws/ && ./baxter.sh sim
+    to start Baxter in Simulation mode.
+
+6> Launch the Graphical Simulator - NOT WORKING YET - 
