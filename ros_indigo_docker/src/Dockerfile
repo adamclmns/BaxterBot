@@ -1,4 +1,6 @@
-# Taken from https://github.com/eruffaldi/linuxsetup/blob/master/dockerbaxter/Dockerfile to be Modified and cut down as needed for this project
+# Adapted from https://github.com/eruffaldi/linuxsetup/blob/master/dockerbaxter/Dockerfile 
+# Referencing - https://github.com/rogaha/docker-desktop/blob/master/Dockerfile For X11 Support
+
 FROM ubuntu:14.04
 
 RUN apt-get -y update
@@ -32,9 +34,26 @@ RUN /bin/bash -c "cd ~/ros_ws/ && wget https://github.com/RethinkRobotics/baxter
 # TODO: Make sure baxter.sh gets put in the right directory on build
 RUN echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 # TODO: Add an echo here to tell the user what to do ('roscore' or 'rosrun', etc. Maybe even have a tutorial. )
-RUN echo "roslaunch baxter_gazebo baxter_world.launch"
-RUN echo "roscore"
-RUN echo "./baxter.sh sim"
-CMD /bin/bash
+# FOR X11 Setup
+# Set the env variable DEBIAN_FRONTEND to noninteractive
+ENV DEBIAN_FRONTEND noninteractive
+
+# Installing the environment required: xserver, xdm, flux box, roc-filer and ssh
+RUN apt-get install -y xpra rox-filer openssh-server pwgen xserver-xephyr xdm fluxbox xvfb sudo
+
+# Configuring xdm to allow connections from any IP address and ssh to allow X11 Forwarding. 
+RUN sed -i 's/DisplayManager.requestPort/!DisplayManager.requestPort/g' /etc/X11/xdm/xdm-config
+RUN sed -i '/#any host/c\*' /etc/X11/xdm/Xaccess
+RUN ln -s /usr/bin/Xorg /usr/bin/X
+RUN echo X11Forwarding yes >> /etc/ssh/ssh_config
+
+
+# Set locale (fix the locale warnings)
+RUN localedef -v -c -i en_US -f UTF-8 en_US.UTF-8 || :
+
+ADD . /src
+EXPOSE 22
+
+CMD "/bin/bash"
 #MISSING DOWNLOAD of GAZEBO models inside: user/.gazebo/models
 #https://bitbucket.org/osrf/gazebo_models/downloads
