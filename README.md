@@ -3,8 +3,8 @@ Setting up and doing things with a simulated (and eventually a real one) Baxter 
 
 ## Requirements
 ------------------------
-Need to use ROS Indigo, with terminal access. 
-Need to run in an Ubuntu Development Environment. 
+Need to use ROS Indigo, with terminal access.
+Need to run in an Ubuntu Development Environment.
 
 
 ## Useful Links

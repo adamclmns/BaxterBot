@@ -48,17 +48,26 @@ Building a docker image for ROS indigo and running baxter simulator
 
 4> Use docker run to spin up an instance of the Container, and launch ROS
     In a command line run 
-        $> docker run -it baxter-sim
+        $> docker run -it --env="DISPLAY" --env="QT_X11_NO_MITSHM=1" --volume="/tmp/.X11-unix:/tmp/.X11-unix:rw" baxter-sim
     Modify the baxter.sh file "your_ip" value to "127.0.0.1"
     Run the following to start ROS
-        $> roscore
+        $> roscore  
+    This may be automatically started in later versions. 
 
 5> Connect to the docker instance from another terminal. 
     Run 
-        $> docker exec -it baxter-sim bash
+        $> docker ps
+    You should see the "NAME" field for your running instance. Copy this name
     to open a new terminal to the Container. 
     Run
+        $> docer exec -it $INSTANCE_NAME bash
+    Once in the Docker image shell, run
         $> cd ~/ros_ws/ && ./baxter.sh sim
     to start Baxter in Simulation mode.
 
-6> Launch the Graphical Simulator - NOT WORKING YET - 
+6> Launch the Graphical Simulator - This only works on real Linux machines. No Bash On Ubuntu On Windows here.
+    run
+        $> roslaunch baxter_gazebo baxter_world.launch
+    In another terminal, connect to the Docker shell following the second command from Step 5
+    run 
+        $> rosrun baxter_examples <Something will go here later>
