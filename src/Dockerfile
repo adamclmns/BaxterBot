@@ -27,8 +27,9 @@ RUN /bin/bash -c "cd ~/ros_ws/src && wstool merge https://raw.githubusercontent.
 RUN /bin/bash -c "cd ~/ros_ws/src && wstool merge https://raw.githubusercontent.com/RethinkRobotics/baxter_simulator/master/baxter_simulator.rosinstall"
 RUN /bin/bash -c "cd ~/ros_ws/src && wstool update"
 RUN /bin/bash -c "cd ~/ros_ws && source /opt/ros/indigo/setup.bash && catkin_make && catkin_make install"
+
 # TODO: Maybe pull baxter.sh from my git Repo? Since "ADD" and "COPY" are not working as expected?
-#RUN /bin/bash -c "cd ~/ros_ws/ && wget https://github.com/RethinkRobotics/baxter/raw/master/baxter.sh && chmod u+x baxter.sh"
+#RUN /bin/bash -c "cd ~/ros_ws/ && wget https://github.com/adamclmns/BaxterBot/raw/master/src/baxter.sh && chmod u+x baxter.sh"
 
 # Source the setup.bash file in .bashrc so we never have to do it again
 RUN echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
