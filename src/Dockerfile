@@ -39,13 +39,14 @@ RUN echo "source /opt/ros/indigo/setup.bash" >> ~/.bashrc
 RUN apt-get -y install ros-indigo-moveit-full
 # Include the user-modified baxter.sh file
 ADD baxter.sh root/ros_ws/
+RUN /bin/bash -c "cd /root/ros_ws/ && chmod u+x baxter.sh"
 # Installing MoveIt
 RUN /bin/bash -c "cd ~/ros_ws/src && git clone https://github.com/ros-planning/moveit_robots.git"
 RUN /bin/bash -c "source /opt/ros/indigo/setup.bash && source ~/ros_ws/baxter.sh && cd ~/ros_ws/ && catkin_make"
 
 
 # So that we don't have to specify an entry point on run
-CMD ["/bin/bash", "roscore"]
+CMD ["/bin/bash"]
 
 # to build, run 
 # $> docker build . -t baxter-sim
